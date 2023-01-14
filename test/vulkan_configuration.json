@@ -1,0 +1,291 @@
+{
+    "$schema": "vlk",
+    "config" : {
+        "instance_name":"diesel vulkan",
+        "instance_version": "0.0.1",
+        "core_extensions":[
+            "VK_KHR_surface",
+            "VK_KHR_swapchain",
+            "VK_KHR_portability_subset"
+        ],
+        "user_extensions":[
+            "VK_KHR_device_group",
+            "VK_KHR_device_group_creation"
+        ],
+        "vulkan_layers":[
+            "VK_EXT_debug_report",
+            "VK_EXT_debg_util",
+            "VK_LAYER_KHRONOS_validation"
+        ],
+        "swapchain_size":3,
+        "swapchain_images":{
+            "image_0":{
+                "name":"$swapchain_color",
+                "view_type": "VK_IMAGE_TYPE_2D",
+                "format": "VK_FORMAT_R8G8B8A8_SRGB",
+                "base_mip":0,
+                "level_count":1,
+                "base_array":0,
+                "layer_count":1,
+                "aspect_flags":"VK_ASPECT_FLAGS",
+                "tiling":"VK_IMAGE_TILING_OPTIMAL",
+                "is_per_frame":true,
+                "sampling": "VK_SAMPLE_COUNT_1_BIT",
+                "extent":{
+                    "width": 1024,
+                    "height":1024
+                },
+                "allocator_method":"gpu_only"
+            },
+            "image_1":{
+                "name":"$swapchain_depth",
+                "view_type": "VK_IMAGE_TYPE_2D",
+                "format": "VK_FORMAT_D32_SFLOAT",
+                "base_mip":0,
+                "level_count":1,
+                "base_array":0,
+                "layer_count":1,
+                "aspect_flags":"VK_ASPECT_FLAGS",
+                "tiling":"VK_IMAGE_TILING_OPTIMAL",
+                "is_per_frame":true,
+                "sampling": "VK_SAMPLE_COUNT_1_BIT",
+                "extent":{
+                    "width": 1024,
+                    "height":1024
+                },
+                "allocator_method":"gpu_only"
+            }
+        },
+        "window":{
+            "width":1024,
+            "height":1024
+        },
+        "device_mode": "VK_PIPELINE_BIND_POINT_GRAPHICS"
+    },
+    "pipelines":{
+        "pipe0":{
+            "renderpass":"$renderpass0",
+            "subpass":0,
+            "topology":"VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST",
+            "cull_mode":"VK_CULL_NONE",
+            "line_width":1.0,
+            "front_face":"VK_FRONT_FACE_CLOCKWISE",
+            "program":"$program_0",
+            "depth":{
+                "bias_constant":0.0,
+                "bias_clamp":0.0,
+                "bias_slope":0.0
+            },
+            "mssa":{
+                "enable":false,
+                "bit_sample":"VK_SAMPLE_COUNT_1_BIT",
+                "min_sample_shading":1.0,
+                "alpha_enable":false,
+                "alpha_one":false
+            },
+            "attachment_blend":{
+                "blend_mode":"VK_FALSE",
+                "write_mode":"VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT"
+            },
+            "mesh_descriptor":{
+                "name":"$std_mesh",
+                "description":"Layout as follows, [vertex, normal, uv, color] with associated indices buffer and data is allocated in sequential blocks",
+                "indices_buffer": true,
+                "vertex_binding":{
+                    "binding": 0,
+                    "stride_bytes":44,
+                    "rate":"VK_VERTEX_INPUT_RATE_VERTEX"
+                },
+                "attributes":{
+                    "vertex_attribute":{
+                        "binding":0,
+                        "location":0,
+                        "format":"VK_FORMAT_R32G32B32_SFLOAT"
+                    },
+                    "normal_attribute":{
+                        "binding":0,
+                        "location":1,
+                        "format":"VK_FORMAT_R32G32B32_SFLOAT",
+                        "offset":12
+                    },
+                    "uv_attribute":{
+                        "binding":0,
+                        "location":2,
+                        "format":"VK_FORMAT_R32G32_SFLOAT",
+                        "offset":24
+                    },
+                    "color_attribute":{
+                        "binding":0,
+                        "location":3,
+                        "format":"VK_FORMAT_R32G32B32_SFLOAT",
+                        "offset":32
+                    }
+                }
+             
+            },
+            "descriptor_layouts":{
+                "layout0": {
+                    "type": "uniform",
+                    "binding": 0,
+                    "shader_stages":[
+                        "vertex"
+                    ],
+                    "uniform_buffer": "$scene_uniforms"
+                },
+                "layout1":{
+                    "type": "uniform_dynamic",
+                    "binding":1,
+                    "shader_stages":[
+                        "vertex",
+                        "fragment"
+                    ],
+                    "uniform_buffer":"$per_object_uniforms",
+                    "max_elements": 100
+                },
+                "layout2":{
+                    "type": "storage_dynamc",
+                    "binding": 3,
+                    "shader_stages":[
+                        "vertex",
+                        "fragment"
+                    ],
+                    "uniform_buffer":"$position_data",
+                    "max_elements":1000
+                }
+            },
+            "push_constants":{
+                "instance":{
+                    "offset":0,
+                    "size":4,
+                    "shader_stages":[
+                        "vertex"
+                    ]
+                }
+            }
+
+        }
+    },
+    "vertex_buffers":{
+        "allocator_method":"gpu_shared",
+        "vtx_0":{
+            "size":1024,
+            "offset":0
+        }
+    },
+    "sampler_buffers":{
+        "allocator_method":"gpu_shared",
+        "$sampler_0":{
+            "size":1024,
+            "offset":0,
+            "format":"VK_FORMAT_R8G8B8A8_SRGB"
+        }
+    },
+    "uniform_buffers":{
+        "allocator_method":"gpu_shared",
+        "$per_object_uniforms":{
+            "size":576,
+            "element_size":192,
+            "uniform_elements":3,
+            "element_padded_size":256,
+            "gpu_allocation_size":768
+        },
+        "$scene_uniforms":{
+            "size":576,
+            "element_size":192,
+            "uniform_elements":1,
+            "element_padded_size":256,
+            "gpu_allocation_size":256
+        },
+        "$position_data":{
+            "size":16000,
+            "element_size":12,
+            "element_padded_size": 16,
+            "uniform_elements": 1000
+        }
+    },
+    "indice_buffers":{
+        "allocator_method":"gpu_shared",
+        "vtx_0":{
+            "size": 1680,
+            "offset":0
+        }
+    },
+    "shader_programs":{
+        "$program_0":{
+            "vertex":"vert.spv",
+            "fragment":"frag.spv"
+        }
+    },
+    "renderpasses":{
+        "renderpass_0":{
+            "command_buffer":"cmd0",
+            "subpasses":{
+                "subpass_0":{
+                    "dependencies":{
+                        "color":{
+                            "src_subpass": "VK_SUBPASS_EXTERNAL",
+                            "dst_subpass": 0,
+                            "src_mask": "VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT",
+                            "src_access_mask":0,
+                            "dst_mask":"VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT",
+                            "dst_access_mask":"VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT"
+                        },
+                        "depth":{
+                            "src_subpass":"VK_SUBPASS_EXTERNAL",
+                            "dst_subpass": 0,
+                            "src_mask": "VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT",
+                            "src_access_mask": 0,
+                            "dst_mask":  "VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT",
+                            "dst_access_mask": "VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT"
+                        }
+                    },
+                    "bindpoint":"VK_PIPELINE_BIND_POINT_GRAPHICS",
+                    "color_attachments":["$color_attachment0"],
+                    "depth_attachments":["$depth_attachment0"],
+                    "input_attachments":[ "$input_attachment0"],
+                    "preserve_attachments":[]
+                }
+            }
+        }
+    },
+    "attachments":{
+        "color_attachments":{
+            "$color_attachment0":{
+            "layout":"VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL",
+            "sample_count":"VK_SAMPLE_COUNT_1_BIT",
+            "load_op":"VK_ATTACHEMNT_LOAD_OP_CLEAR",
+            "store_op":"VK_ATTACHMENT_STORE_STORE",
+            "stencil_load_op":"VK_ATTACHMENT_LOAD_OP_DONT_CARE",
+            "stencil_store_op":"VK_ATTACHMENT_LOAD_OP_DONT_CARE",
+            "initial_layout":"VK_IMAGE_LAYOUT_UNDEFINED",
+            "final_layout":"VK_IMAGE_LAYOUT_PRESENT_SRC_KHR"
+            }
+        },
+        "depth_attachments":{
+            "$depth_attachment0":{
+                "layout":"VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL",
+                "format": "VK_FORMAT_D32_SFLOAT",
+                "sample_count":"VK_SAMPLE_COUNT_1_BIT",
+                "load_op":"VK_ATTACHMENT_LOAD_OP_CLEAR",
+                "store_op":"VK_ATTACHMENT_STORE_OP_DONT_CARE",
+                "stencil_load_op":"VK_ATTACHEMNT_LOAD_OP_CLEAR",
+                "stencil_store_op":"VK_ATTACHMENT_STORE_OP_DONT_CARE",
+                "initial_layout":"VK_IMAGE_LAYOUT_UNDEFINED",
+                "final_layout":"VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL"
+            }
+        }
+    },
+    "command_buffers":{
+        "$cmd0":{
+            "count":1,
+            "level":"VK_COMMAND_BUFFER_LEVEL_PRIMARY",
+            "queue":"$graphics_queue"
+        }
+    },
+    "queues":{
+        "$graphics_queue":{
+            "index":0,
+            "queue_family": "graphics"
+        }
+    }
+}

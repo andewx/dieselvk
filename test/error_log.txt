@@ -1,0 +1,13 @@
+
+ERROR: 2022/10/19 21:27:54 core.go:157: Vulkan Missing Device Extensions []
+ERROR: 2022/10/19 21:28:25 core.go:157: Vulkan Missing Device Extensions []
+ERROR: 2022/11/10 23:01:50 core.go:173: Error Requested Memory Pool size greater than available heap size
+ERROR: 2022/11/10 23:02:38 core.go:173: Error Requested Memory Pool size greater than available heap size
+ERROR: 2022/11/10 23:02:48 core.go:173: Error Requested Memory Pool size greater than available heap size
+ERROR: 2022/11/10 23:06:01 core.go:173: Error Requested Memory Pool size greater than available heap size
+ERROR: 2022/11/10 23:11:54 core.go:173: Error Requested Memory Pool size greater than available heap size
+ERROR: 2022/11/10 23:12:07 core.go:173: Error Requested Memory Pool size greater than available heap size
+ERROR: 2022/11/10 23:15:59 core.go:173: Error Requested Memory Pool size greater than available heap size
+ERROR: 2022/11/10 23:21:16 core.go:173: Error Requested Memory Pool size greater than available heap size
+ERROR: 2023/01/11 13:31:34 core.go:159: Error creating instance with required extensions
+ERROR: 2023/01/13 17:52:17 core.go:159: Error creating instance with required extensions

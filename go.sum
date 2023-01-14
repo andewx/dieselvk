@@ -1,0 +1,9 @@
+github.com/emirpasic/gods v1.18.1 h1:FXtiHYKDGKCW2KzwZKx0iC0PQmdlorYgdFG9jPXJ1Bc=
+github.com/emirpasic/gods v1.18.1/go.mod h1:8tpGGwCnJ5H4r6BWwaV6OrWmMoPhUl5jm/FMNAnJvWQ=
+github.com/go-gl/glfw/v3.3/glfw v0.0.0-20221017161538-93cebf72946b h1:GgabKamyOYguHqHjSkDACcgoPIz3w0Dis/zJ1wyHHHU=
+github.com/go-gl/glfw/v3.3/glfw v0.0.0-20221017161538-93cebf72946b/go.mod h1:tQ2UAYgL5IevRw8kRxooKSPJfGvJ9fJQFa0TUsXzTg8=
+github.com/vulkan-go/vma v0.0.0-20210826152021-dfd82bd90352 h1:N98VYk2K82+dil+0JdPKtcR51rvxmx6Q0AsTVXKqzUg=
+github.com/vulkan-go/vma v0.0.0-20210826152021-dfd82bd90352/go.mod h1:CWunt7sNMzNuJKTCiwS/8kZZ2GY7c70WZSJsnb4RY0g=
+github.com/vulkan-go/vulkan v0.0.0-20200123094538-aa511c71e200/go.mod h1:X6Qqg0j5A5cYHhFXUOl6TL/vYdyh/ajvyCvh+sEHQFI=
+github.com/vulkan-go/vulkan v0.0.0-20221012123230-8e2684a41107 h1:ksu7qcw+nDMgL7L3bjRbcE5o8Lk9F5E/lUIO7gtPHAY=
+github.com/vulkan-go/vulkan v0.0.0-20221012123230-8e2684a41107/go.mod h1:Y5Ti1uUBdKDsb0W8aPtIo9krs+29Y7p6Bc9yyy4AM6g=
