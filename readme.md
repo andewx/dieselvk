@@ -1,9 +1,5 @@
 # DieselVK
 
-### WARNING -- V 0.0.1 BUILD UNDERLYING API IS SUBJECT TO MAJOR REVISION. IF USING THIS LIBARY FOR THE TIME BEING IT IS SUGGESTED AS A FORK ONLY REPOSITORY.
-
-### dslvk vulkan engine usage often requires pre-conditions to be met which require intimate vulkan api knowledge and currently most function headers
-### do not check these pre-conditions as a base alpha release. A major revision feature is due with pre-condition checking and error/usage log reporting
 
 -`dieselvk.Core`
 
