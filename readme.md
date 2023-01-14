@@ -1,5 +1,6 @@
 # DieselVK
 
+![diselvk logo](logo/dslvk.jpg?raw=true "dieslvk")
 
 -`dieselvk.Core`
 
