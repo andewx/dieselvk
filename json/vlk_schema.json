@@ -1,0 +1,1824 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "https://github.com/andewx/dieselvk/json/vlk_schema.json",
+    "type": "object",
+    "default": {},
+    "title": "vlk",
+    "required": [
+        "schema",
+        "config",
+        "pipelines",
+        "vertex_buffers",
+        "sampler_buffers",
+        "uniform_buffers",
+        "indice_buffers",
+        "shader_programs",
+        "renderpasses",
+        "command_buffers",
+        "queues",
+        "framebuffers"
+    ],
+    "properties": {
+        "schema": {
+            "type": "string",
+            "default": "",
+            "title": "schema",
+            "examples": [
+                "vlk"
+            ]
+        },
+        "config": {
+            "type": "object",
+            "default": {},
+            "title": "config",
+            "required": [
+                "instance_name",
+                "instance_version",
+                "core_extensions",
+                "user_extensions",
+                "vulkan_layers",
+                "swapchain_size",
+                "swapchains",
+                "window",
+                "device_mode"
+            ],
+            "properties": {
+                "instance_name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "instance_name",
+                    "examples": [
+                        "diesel vulkan"
+                    ]
+                },
+                "instance_version": {
+                    "type": "string",
+                    "default": "",
+                    "title": "instance_version",
+                    "examples": [
+                        "0.0.1"
+                    ]
+                },
+                "core_extensions": {
+                    "type": "array",
+                    "default": [],
+                    "title": "core_extensions",
+                    "items": {
+                        "type": "string",
+                        "title": "A",
+                        "examples": [
+                            "VK_KHR_surface",
+                            "VK_KHR_swapchain",
+                            "VK_KHR_portability_subset"
+                        ]
+                    },
+                    "examples": [
+                        ["VK_KHR_surface",
+                            "VK_KHR_swapchain",
+                            "VK_KHR_portability_subset"
+                        ]
+                    ]
+                },
+                "user_extensions": {
+                    "type": "array",
+                    "default": [],
+                    "title": "user_extensions",
+                    "items": {
+                        "type": "string",
+                        "title": "A",
+                        "examples": [
+                            "VK_KHR_device_group",
+                            "VK_KHR_device_group_creation"
+                        ]
+                    },
+                    "examples": [
+                        ["VK_KHR_device_group",
+                            "VK_KHR_device_group_creation"
+                        ]
+                    ]
+                },
+                "vulkan_layers": {
+                    "type": "array",
+                    "default": [],
+                    "title": "vulkan_layers",
+                    "items": {
+                        "type": "string",
+                        "title": "A",
+                        "examples": [
+                            "VK_EXT_debug_report",
+                            "VK_EXT_debg_util",
+                            "VK_LAYER_KHRONOS_validation"
+                        ]
+                    },
+                    "examples": [
+                        ["VK_EXT_debug_report",
+                            "VK_EXT_debg_util",
+                            "VK_LAYER_KHRONOS_validation"
+                        ]
+                    ]
+                },
+                "swapchain_size": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "swapchain_size",
+                    "examples": [
+                        3
+                    ]
+                },
+                "swapchains": {
+                    "type": "array",
+                    "default": [],
+                    "title": "swapchains",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                },
+                "window": {
+                    "type": "object",
+                    "default": {},
+                    "title": "window",
+                    "required": [
+                        "width",
+                        "height"
+                    ],
+                    "properties": {
+                        "width": {
+                            "type": "integer",
+                            "default": 0,
+                            "title": "width",
+                            "examples": [
+                                1024
+                            ]
+                        },
+                        "height": {
+                            "type": "integer",
+                            "default": 0,
+                            "title": "height",
+                            "examples": [
+                                1024
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "width": 1024,
+                        "height": 1024
+                    }]
+                },
+                "device_mode": {
+                    "type": "string",
+                    "default": "",
+                    "title": "device_mode",
+                    "examples": [
+                        "VK_PIPELINE_BIND_POINT_GRAPHICS"
+                    ]
+                }
+            },
+            "examples": [{
+                "instance_name": "diesel vulkan",
+                "instance_version": "0.0.1",
+                "core_extensions": [
+                    "VK_KHR_surface",
+                    "VK_KHR_swapchain",
+                    "VK_KHR_portability_subset"
+                ],
+                "user_extensions": [
+                    "VK_KHR_device_group",
+                    "VK_KHR_device_group_creation"
+                ],
+                "vulkan_layers": [
+                    "VK_EXT_debug_report",
+                    "VK_EXT_debg_util",
+                    "VK_LAYER_KHRONOS_validation"
+                ],
+                "swapchain_size": 3,
+                "swapchains": [],
+                "window": {
+                    "width": 1024,
+                    "height": 1024
+                },
+                "device_mode": "VK_PIPELINE_BIND_POINT_GRAPHICS"
+            }]
+        },
+        "pipelines": {
+            "type": "array",
+            "default": [],
+            "title": "pipelines",
+            "items": {},
+            "examples": [
+                []
+            ]
+        },
+        "vertex_buffers": {
+            "type": "array",
+            "default": [],
+            "title": "vertex_buffers",
+            "items": {},
+            "examples": [
+                []
+            ]
+        },
+        "sampler_buffers": {
+            "type": "array",
+            "default": [],
+            "title": "sampler_buffers",
+            "items": {},
+            "examples": [
+                []
+            ]
+        },
+        "uniform_buffers": {
+            "type": "array",
+            "default": [],
+            "title": "uniform_buffers",
+            "items": {},
+            "examples": [
+                []
+            ]
+        },
+        "indice_buffers": {
+            "type": "array",
+            "default": [],
+            "title": "indice_buffers",
+            "items": {},
+            "examples": [
+                []
+            ]
+        },
+        "shader_programs": {
+            "type": "array",
+            "default": [],
+            "title": "shader_programs",
+            "items": {},
+            "examples": [
+                []
+            ]
+        },
+        "renderpasses": {
+            "type": "array",
+            "default": [],
+            "title": "renderpasses",
+            "items": {},
+            "examples": [
+                []
+            ]
+        },
+        "command_buffers": {
+            "type": "array",
+            "default": [],
+            "title": "command_buffers",
+            "items": {},
+            "examples": [
+                []
+            ]
+        },
+        "queues": {
+            "type": "array",
+            "default": [],
+            "title": "queues",
+            "items": {},
+            "examples": [
+                []
+            ]
+        },
+        "framebuffers": {
+            "type": "array",
+            "default": [],
+            "title": "framebuffers",
+            "items": {},
+            "examples": [
+                []
+            ]
+        },
+        "image": {
+            "type": "object",
+            "default": {},
+            "title": "image",
+            "required": [
+                "name",
+                "view_type",
+                "format",
+                "base_mip",
+                "level_count",
+                "base_array",
+                "layer_count",
+                "aspect_flags",
+                "tiling",
+                "is_per_frame",
+                "sampling",
+                "extent"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "name",
+                    "examples": [
+                        "framebuffer_color_0"
+                    ]
+                },
+                "view_type": {
+                    "type": "string",
+                    "default": "",
+                    "title": "view_type",
+                    "examples": [
+                        "VK_IMAGE_TYPE_2D"
+                    ]
+                },
+                "format": {
+                    "type": "string",
+                    "default": "",
+                    "title": "format",
+                    "examples": [
+                        "VK_FORMAT_R8G8B8A8_SRGB"
+                    ]
+                },
+                "base_mip": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "base_mip",
+                    "examples": [
+                        0
+                    ]
+                },
+                "level_count": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "level_count",
+                    "examples": [
+                        1
+                    ]
+                },
+                "base_array": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "base_array",
+                    "examples": [
+                        0
+                    ]
+                },
+                "layer_count": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "layer_count",
+                    "examples": [
+                        1
+                    ]
+                },
+                "aspect_flags": {
+                    "type": "string",
+                    "default": "",
+                    "title": "aspect_flags",
+                    "examples": [
+                        "VK_ASPECT_FLAGS"
+                    ]
+                },
+                "tiling": {
+                    "type": "string",
+                    "default": "",
+                    "title": "tiling",
+                    "examples": [
+                        "VK_IMAGE_TILING_OPTIMAL"
+                    ]
+                },
+                "is_per_frame": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "is_per_frame",
+                    "examples": [
+                        true
+                    ]
+                },
+                "sampling": {
+                    "type": "string",
+                    "default": "",
+                    "title": "sampling",
+                    "examples": [
+                        "VK_SAMPLE_COUNT_1_BIT"
+                    ]
+                },
+                "extent": {
+                    "type": "object",
+                    "default": {},
+                    "title": "extent",
+                    "required": [
+                        "width",
+                        "height"
+                    ],
+                    "properties": {
+                        "width": {
+                            "type": "integer",
+                            "default": 0,
+                            "title": "width",
+                            "examples": [
+                                1024
+                            ]
+                        },
+                        "height": {
+                            "type": "integer",
+                            "default": 0,
+                            "title": "height",
+                            "examples": [
+                                1024
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "width": 1024,
+                        "height": 1024
+                    }]
+                }
+            },
+            "examples": [{
+                "name": "framebuffer_color_0",
+                "view_type": "VK_IMAGE_TYPE_2D",
+                "format": "VK_FORMAT_R8G8B8A8_SRGB",
+                "base_mip": 0,
+                "level_count": 1,
+                "base_array": 0,
+                "layer_count": 1,
+                "aspect_flags": "VK_ASPECT_FLAGS",
+                "tiling": "VK_IMAGE_TILING_OPTIMAL",
+                "is_per_frame": true,
+                "sampling": "VK_SAMPLE_COUNT_1_BIT",
+                "extent": {
+                    "width": 1024,
+                    "height": 1024
+                }
+            }]
+        },
+        "queue": {
+            "type": "object",
+            "default": {},
+            "title": "queue",
+            "required": [
+                "name",
+                "index",
+                "family"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "name",
+                    "examples": [
+                        "graphics_queue"
+                    ]
+                },
+                "index": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "index",
+                    "examples": [
+                        0
+                    ]
+                },
+                "family": {
+                    "type": "string",
+                    "default": "",
+                    "title": "family",
+                    "examples": [
+                        "graphics"
+                    ]
+                }
+            },
+            "examples": [{
+                "name": "graphics_queue",
+                "index": 0,
+                "family": "graphics"
+            }]
+        },
+        "command_buffer": {
+            "type": "object",
+            "default": {},
+            "title": "command_buffer",
+            "required": [
+                "name",
+                "count",
+                "level",
+                "queue"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "name",
+                    "examples": [
+                        "cmd0"
+                    ]
+                },
+                "count": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "count",
+                    "examples": [
+                        1
+                    ]
+                },
+                "level": {
+                    "type": "string",
+                    "default": "",
+                    "title": "level",
+                    "examples": [
+                        "VK_COMMAND_BUFFER_LEVEL_PRIMARY"
+                    ]
+                },
+                "queue": {
+                    "type": "string",
+                    "default": "",
+                    "title": "queue",
+                    "examples": [
+                        "graphics_queue"
+                    ]
+                }
+            },
+            "examples": [{
+                "name": "cmd0",
+                "count": 1,
+                "level": "VK_COMMAND_BUFFER_LEVEL_PRIMARY",
+                "queue": "graphics_queue"
+            }]
+        },
+        "image_attachment": {
+            "type": "object",
+            "default": {},
+            "title": "image_attachment",
+            "required": [
+                "name",
+                "image_ref",
+                "layout",
+                "format",
+                "sample_count",
+                "load_op",
+                "store_op",
+                "stencil_load_op",
+                "stencil_store_op",
+                "initial_layout",
+                "final_layout"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "name",
+                    "examples": [
+                        "color_attachment0"
+                    ]
+                },
+                "image_ref": {
+                    "type": "string",
+                    "default": "",
+                    "title": "image_ref",
+                    "examples": [
+                        "framebuffer_color_0"
+                    ]
+                },
+                "layout": {
+                    "type": "string",
+                    "default": "",
+                    "title": "layout",
+                    "examples": [
+                        "VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL"
+                    ]
+                },
+                "format": {
+                    "type": "string",
+                    "default": "",
+                    "title": "format",
+                    "examples": [
+                        "VK_FORMAT_D32_SFLOAT"
+                    ]
+                },
+                "sample_count": {
+                    "type": "string",
+                    "default": "",
+                    "title": "sample_count",
+                    "examples": [
+                        "VK_SAMPLE_COUNT_1_BIT"
+                    ]
+                },
+                "load_op": {
+                    "type": "string",
+                    "default": "",
+                    "title": "load_op",
+                    "examples": [
+                        "VK_ATTACHMENT_LOAD_OP_CLEAR"
+                    ]
+                },
+                "store_op": {
+                    "type": "string",
+                    "default": "",
+                    "title": "store_op",
+                    "examples": [
+                        "VK_ATTACHMENT_STORE_OP_DONT_CARE"
+                    ]
+                },
+                "stencil_load_op": {
+                    "type": "string",
+                    "default": "",
+                    "title": "stencil_load_op",
+                    "examples": [
+                        "VK_ATTACHEMNT_LOAD_OP_CLEAR"
+                    ]
+                },
+                "stencil_store_op": {
+                    "type": "string",
+                    "default": "",
+                    "title": "stencil_store_op",
+                    "examples": [
+                        "VK_ATTACHMENT_STORE_OP_DONT_CARE"
+                    ]
+                },
+                "initial_layout": {
+                    "type": "string",
+                    "default": "",
+                    "title": "initial_layout",
+                    "examples": [
+                        "VK_IMAGE_LAYOUT_UNDEFINED"
+                    ]
+                },
+                "final_layout": {
+                    "type": "string",
+                    "default": "",
+                    "title": "final_layout",
+                    "examples": [
+                        "VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL"
+                    ]
+                }
+            },
+            "examples": [{
+                "name": "color_attachment0",
+                "image_ref": "framebuffer_color_0",
+                "layout": "VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL",
+                "format": "VK_FORMAT_D32_SFLOAT",
+                "sample_count": "VK_SAMPLE_COUNT_1_BIT",
+                "load_op": "VK_ATTACHMENT_LOAD_OP_CLEAR",
+                "store_op": "VK_ATTACHMENT_STORE_OP_DONT_CARE",
+                "stencil_load_op": "VK_ATTACHEMNT_LOAD_OP_CLEAR",
+                "stencil_store_op": "VK_ATTACHMENT_STORE_OP_DONT_CARE",
+                "initial_layout": "VK_IMAGE_LAYOUT_UNDEFINED",
+                "final_layout": "VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL"
+            }]
+        },
+        "subpass": {
+            "type": "object",
+            "default": {},
+            "title": "subpass",
+            "required": [
+                "dependencies",
+                "bindpoint",
+                "color_attachments",
+                "depth_attachments",
+                "input_attachments",
+                "preserve_attachments"
+            ],
+            "properties": {
+                "dependencies": {
+                    "type": "array",
+                    "default": [],
+                    "title": "dependencies",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                },
+                "bindpoint": {
+                    "type": "string",
+                    "default": "",
+                    "title": "bindpoint",
+                    "examples": [
+                        "VK_PIPELINE_BIND_POINT_GRAPHICS"
+                    ]
+                },
+                "color_attachments": {
+                    "type": "array",
+                    "default": [],
+                    "title": "color_attachments",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                },
+                "depth_attachments": {
+                    "type": "array",
+                    "default": [],
+                    "title": "depth_attachments",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                },
+                "input_attachments": {
+                    "type": "array",
+                    "default": [],
+                    "title": "input_attachments",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                },
+                "preserve_attachments": {
+                    "type": "array",
+                    "default": [],
+                    "title": "preserve_attachments",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                }
+            },
+            "examples": [{
+                "dependencies": [],
+                "bindpoint": "VK_PIPELINE_BIND_POINT_GRAPHICS",
+                "color_attachments": [],
+                "depth_attachments": [],
+                "input_attachments": [],
+                "preserve_attachments": []
+            }]
+        },
+        "subpass_dependency": {
+            "type": "object",
+            "default": {},
+            "title": "subpass_dependency",
+            "required": [
+                "name",
+                "src_subpass",
+                "dst_subpass",
+                "src_mask",
+                "src_access_mask",
+                "dst_mask",
+                "dst_access_mask"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "name",
+                    "examples": [
+                        "color"
+                    ]
+                },
+                "src_subpass": {
+                    "type": "string",
+                    "default": "",
+                    "title": "src_subpass",
+                    "examples": [
+                        "VK_SUBPASS_EXTERNAL"
+                    ]
+                },
+                "dst_subpass": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "dst_subpass",
+                    "examples": [
+                        0
+                    ]
+                },
+                "src_mask": {
+                    "type": "string",
+                    "default": "",
+                    "title": "src_mask",
+                    "examples": [
+                        "VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT"
+                    ]
+                },
+                "src_access_mask": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "src_access_mask",
+                    "examples": [
+                        0
+                    ]
+                },
+                "dst_mask": {
+                    "type": "string",
+                    "default": "",
+                    "title": "dst_mask",
+                    "examples": [
+                        "VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT"
+                    ]
+                },
+                "dst_access_mask": {
+                    "type": "string",
+                    "default": "",
+                    "title": "dst_access_mask",
+                    "examples": [
+                        "VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT"
+                    ]
+                }
+            },
+            "examples": [{
+                "name": "color",
+                "src_subpass": "VK_SUBPASS_EXTERNAL",
+                "dst_subpass": 0,
+                "src_mask": "VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT",
+                "src_access_mask": 0,
+                "dst_mask": "VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT",
+                "dst_access_mask": "VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT"
+            }]
+        },
+        "renderpass": {
+            "type": "object",
+            "default": {},
+            "title": "renderpass",
+            "required": [
+                "name",
+                "command_buffer",
+                "subpasses"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "name",
+                    "examples": [
+                        "renderpass0"
+                    ]
+                },
+                "command_buffer": {
+                    "type": "string",
+                    "default": "",
+                    "title": "command_buffer",
+                    "examples": [
+                        "cmd0"
+                    ]
+                },
+                "subpasses": {
+                    "type": "array",
+                    "default": [],
+                    "title": "subpasses",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                }
+            },
+            "examples": [{
+                "name": "renderpass0",
+                "command_buffer": "cmd0",
+                "subpasses": []
+            }]
+        },
+        "shader": {
+            "type": "object",
+            "default": {},
+            "title": "shader",
+            "required": [
+                "name",
+                "sources"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "name",
+                    "examples": [
+                        "program_0"
+                    ]
+                },
+                "sources": {
+                    "type": "array",
+                    "default": [],
+                    "title": "sources",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                }
+            },
+            "examples": [{
+                "name": "program_0",
+                "sources": []
+            }]
+        },
+        "source": {
+            "type": "object",
+            "default": {},
+            "title": "source",
+            "required": [
+                "url",
+                "type"
+            ],
+            "properties": {
+                "url": {
+                    "type": "string",
+                    "default": "",
+                    "title": "url",
+                    "examples": [
+                        "test/vert.spv"
+                    ]
+                },
+                "type": {
+                    "type": "string",
+                    "default": "",
+                    "title": "type",
+                    "examples": [
+                        "vertex"
+                    ]
+                }
+            },
+            "examples": [{
+                "url": "test/vert.spv",
+                "type": "vertex"
+            }]
+        },
+        "buffer": {
+            "type": "object",
+            "default": {},
+            "title": "buffer",
+            "required": [
+                "name",
+                "size",
+                "offset",
+                "format"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "name",
+                    "examples": [
+                        "vtx_0"
+                    ]
+                },
+                "size": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "size",
+                    "examples": [
+                        576
+                    ]
+                },
+                "element_size": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "element_size",
+                    "examples": [
+                        192
+                    ]
+                },
+                "elements": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "elements",
+                    "examples": [
+                        3
+                    ]
+                },
+                "element_padded_size": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "element_padded_size",
+                    "examples": [
+                        256
+                    ]
+                },
+                "gpu_allocation_size": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "gpu_allocation_size",
+                    "examples": [
+                        768
+                    ]
+                },
+                "offset": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "offset",
+                    "examples": [
+                        0
+                    ]
+                },
+                "format": {
+                    "type": "string",
+                    "default": "",
+                    "title": "format",
+                    "examples": [
+                        "VK_FORMAT_R32G32B32_SFLOAT"
+                    ]
+                }
+            },
+            "examples": [{
+                "name": "vtx_0",
+                "size": 576,
+                "element_size": 192,
+                "elements": 3,
+                "element_padded_size": 256,
+                "gpu_allocation_size": 768,
+                "offset": 0,
+                "format": "VK_FORMAT_R32G32B32_SFLOAT"
+            }]
+        },
+        "pipeline": {
+            "type": "object",
+            "default": {},
+            "title": "pipeline",
+            "required": [
+                "name",
+                "renderpass",
+                "subpass",
+                "topology",
+                "cull_mode",
+                "line_width",
+                "front_face",
+                "program",
+                "depth",
+                "mssa",
+                "attachment_blend",
+                "mesh_descriptor",
+                "pipeline_attributes",
+                "layouts",
+                "constants"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "name",
+                    "examples": [
+                        "pipe0"
+                    ]
+                },
+                "renderpass": {
+                    "type": "string",
+                    "default": "",
+                    "title": "renderpass",
+                    "examples": [
+                        "renderpass0"
+                    ]
+                },
+                "subpass": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "subpass",
+                    "examples": [
+                        0
+                    ]
+                },
+                "topology": {
+                    "type": "string",
+                    "default": "",
+                    "title": "topology",
+                    "examples": [
+                        "VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST"
+                    ]
+                },
+                "cull_mode": {
+                    "type": "string",
+                    "default": "",
+                    "title": "cull_mode",
+                    "examples": [
+                        "VK_CULL_NONE"
+                    ]
+                },
+                "line_width": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "line_width",
+                    "examples": [
+                        1.0
+                    ]
+                },
+                "front_face": {
+                    "type": "string",
+                    "default": "",
+                    "title": "front_face",
+                    "examples": [
+                        "VK_FRONT_FACE_CLOCKWISE"
+                    ]
+                },
+                "program": {
+                    "type": "string",
+                    "default": "",
+                    "title": "program",
+                    "examples": [
+                        "program_0"
+                    ]
+                },
+                "depth": {
+                    "type": "object",
+                    "default": {},
+                    "title": "depth",
+                    "required": [
+                        "bias_constant",
+                        "bias_clamp",
+                        "bias_slope"
+                    ],
+                    "properties": {
+                        "bias_constant": {
+                            "type": "number",
+                            "default": 0.0,
+                            "title": "bias_constant",
+                            "examples": [
+                                0.0
+                            ]
+                        },
+                        "bias_clamp": {
+                            "type": "number",
+                            "default": 0.0,
+                            "title": "bias_clamp",
+                            "examples": [
+                                0.0
+                            ]
+                        },
+                        "bias_slope": {
+                            "type": "number",
+                            "default": 0.0,
+                            "title": "bias_slope",
+                            "examples": [
+                                0.0
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "bias_constant": 0.0,
+                        "bias_clamp": 0.0,
+                        "bias_slope": 0.0
+                    }]
+                },
+                "mssa": {
+                    "type": "object",
+                    "default": {},
+                    "title": "mssa",
+                    "required": [
+                        "enable",
+                        "bit_sample",
+                        "min_sample_shading",
+                        "alpha_enable",
+                        "alpha_one"
+                    ],
+                    "properties": {
+                        "enable": {
+                            "type": "boolean",
+                            "default": false,
+                            "title": "enable",
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "bit_sample": {
+                            "type": "string",
+                            "default": "",
+                            "title": "bit_sample",
+                            "examples": [
+                                "VK_SAMPLE_COUNT_1_BIT"
+                            ]
+                        },
+                        "min_sample_shading": {
+                            "type": "number",
+                            "default": 0.0,
+                            "title": "min_sample_shading",
+                            "examples": [
+                                1.0
+                            ]
+                        },
+                        "alpha_enable": {
+                            "type": "boolean",
+                            "default": false,
+                            "title": "alpha_enable",
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "alpha_one": {
+                            "type": "boolean",
+                            "default": false,
+                            "title": "alpha_one",
+                            "examples": [
+                                false
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "enable": false,
+                        "bit_sample": "VK_SAMPLE_COUNT_1_BIT",
+                        "min_sample_shading": 1.0,
+                        "alpha_enable": false,
+                        "alpha_one": false
+                    }]
+                },
+                "attachment_blend": {
+                    "type": "object",
+                    "default": {},
+                    "title": "attachment_blend",
+                    "required": [
+                        "blend_mode",
+                        "write_mode"
+                    ],
+                    "properties": {
+                        "blend_mode": {
+                            "type": "string",
+                            "default": "",
+                            "title": "blend_mode",
+                            "examples": [
+                                "VK_FALSE"
+                            ]
+                        },
+                        "write_mode": {
+                            "type": "string",
+                            "default": "",
+                            "title": "write_mode",
+                            "examples": [
+                                "VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "blend_mode": "VK_FALSE",
+                        "write_mode": "VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT"
+                    }]
+                },
+                "mesh_descriptor": {
+                    "type": "object",
+                    "default": {},
+                    "title": "mesh_descriptor",
+                    "required": [
+                        "name",
+                        "description",
+                        "indices_buffer",
+                        "vertex_binding"
+                    ],
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "default": "",
+                            "title": "name",
+                            "examples": [
+                                "std_mesh"
+                            ]
+                        },
+                        "description": {
+                            "type": "string",
+                            "default": "",
+                            "title": "description",
+                            "examples": [
+                                "Layout as follows, [vertex, normal, uv, color] with associated indices buffer and data is allocated in sequential blocks"
+                            ]
+                        },
+                        "indices_buffer": {
+                            "type": "boolean",
+                            "default": false,
+                            "title": "indices_buffer",
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "vertex_binding": {
+                            "type": "object",
+                            "default": {},
+                            "title": "vertex_binding",
+                            "required": [
+                                "binding",
+                                "stride_bytes",
+                                "rate"
+                            ],
+                            "properties": {
+                                "binding": {
+                                    "type": "integer",
+                                    "default": 0,
+                                    "title": "binding",
+                                    "examples": [
+                                        0
+                                    ]
+                                },
+                                "stride_bytes": {
+                                    "type": "integer",
+                                    "default": 0,
+                                    "title": "stride_bytes",
+                                    "examples": [
+                                        44
+                                    ]
+                                },
+                                "rate": {
+                                    "type": "string",
+                                    "default": "",
+                                    "title": "rate",
+                                    "examples": [
+                                        "VK_VERTEX_INPUT_RATE_VERTEX"
+                                    ]
+                                }
+                            },
+                            "examples": [{
+                                "binding": 0,
+                                "stride_bytes": 44,
+                                "rate": "VK_VERTEX_INPUT_RATE_VERTEX"
+                            }]
+                        }
+                    },
+                    "examples": [{
+                        "name": "std_mesh",
+                        "description": "Layout as follows, [vertex, normal, uv, color] with associated indices buffer and data is allocated in sequential blocks",
+                        "indices_buffer": true,
+                        "vertex_binding": {
+                            "binding": 0,
+                            "stride_bytes": 44,
+                            "rate": "VK_VERTEX_INPUT_RATE_VERTEX"
+                        }
+                    }]
+                },
+                "pipeline_attributes": {
+                    "type": "array",
+                    "default": [],
+                    "title": "pipeline_attributes",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                },
+                "layouts": {
+                    "type": "array",
+                    "default": [],
+                    "title": "layouts",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                },
+                "constants": {
+                    "type": "array",
+                    "default": [],
+                    "title": "constants",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                }
+            },
+            "examples": [{
+                "name": "pipe0",
+                "renderpass": "renderpass0",
+                "subpass": 0,
+                "topology": "VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST",
+                "cull_mode": "VK_CULL_NONE",
+                "line_width": 1.0,
+                "front_face": "VK_FRONT_FACE_CLOCKWISE",
+                "program": "program_0",
+                "depth": {
+                    "bias_constant": 0.0,
+                    "bias_clamp": 0.0,
+                    "bias_slope": 0.0
+                },
+                "mssa": {
+                    "enable": false,
+                    "bit_sample": "VK_SAMPLE_COUNT_1_BIT",
+                    "min_sample_shading": 1.0,
+                    "alpha_enable": false,
+                    "alpha_one": false
+                },
+                "attachment_blend": {
+                    "blend_mode": "VK_FALSE",
+                    "write_mode": "VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT"
+                },
+                "mesh_descriptor": {
+                    "name": "std_mesh",
+                    "description": "Layout as follows, [vertex, normal, uv, color] with associated indices buffer and data is allocated in sequential blocks",
+                    "indices_buffer": true,
+                    "vertex_binding": {
+                        "binding": 0,
+                        "stride_bytes": 44,
+                        "rate": "VK_VERTEX_INPUT_RATE_VERTEX"
+                    }
+                },
+                "pipeline_attributes": [],
+                "layouts": [],
+                "constants": []
+            }]
+        },
+        "pipeline_attribute": {
+            "type": "object",
+            "default": {},
+            "title": "pipeline_attribute",
+            "required": [
+                "name",
+                "binding",
+                "location",
+                "format",
+                "offset"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "name",
+                    "examples": [
+                        "vertex"
+                    ]
+                },
+                "binding": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "binding",
+                    "examples": [
+                        0
+                    ]
+                },
+                "location": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "location",
+                    "examples": [
+                        3
+                    ]
+                },
+                "format": {
+                    "type": "string",
+                    "default": "",
+                    "title": "format",
+                    "examples": [
+                        "VK_FORMAT_R32G32B32_SFLOAT"
+                    ]
+                },
+                "offset": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "offset",
+                    "examples": [
+                        32
+                    ]
+                }
+            },
+            "examples": [{
+                "name": "vertex",
+                "binding": 0,
+                "location": 3,
+                "format": "VK_FORMAT_R32G32B32_SFLOAT",
+                "offset": 32
+            }]
+        },
+        "descriptor_layout": {
+            "type": "object",
+            "default": {},
+            "title": "descriptor_layout",
+            "required": [
+                "name",
+                "sets",
+                "type",
+                "binding",
+                "shader_stages",
+                "uniform_buffer"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "name",
+                    "examples": [
+                        "layout_01"
+                    ]
+                },
+                "sets": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "sets",
+                    "examples": [
+                        1
+                    ]
+                },
+                "type": {
+                    "type": "string",
+                    "default": "",
+                    "title": "type",
+                    "examples": [
+                        "uniform"
+                    ]
+                },
+                "binding": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "binding",
+                    "examples": [
+                        0
+                    ]
+                },
+                "shader_stages": {
+                    "type": "array",
+                    "default": [],
+                    "title": "shader_stages",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                },
+                "uniform_buffer": {
+                    "type": "string",
+                    "default": "",
+                    "title": "uniform_buffer",
+                    "examples": [
+                        "scene_uniforms"
+                    ]
+                }
+            },
+            "examples": [{
+                "name": "layout_01",
+                "sets": 1,
+                "type": "uniform",
+                "binding": 0,
+                "shader_stages": [],
+                "uniform_buffer": "scene_uniforms"
+            }]
+        },
+        "push_constant": {
+            "type": "object",
+            "default": {},
+            "title": "push_constant",
+            "required": [
+                "name",
+                "offset",
+                "size",
+                "shader_stages"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "name",
+                    "examples": [
+                        "instance"
+                    ]
+                },
+                "offset": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "offset",
+                    "examples": [
+                        0
+                    ]
+                },
+                "size": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "size",
+                    "examples": [
+                        4
+                    ]
+                },
+                "shader_stages": {
+                    "type": "array",
+                    "default": [],
+                    "title": "shader_stages",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                }
+            },
+            "examples": [{
+                "name": "instance",
+                "offset": 0,
+                "size": 4,
+                "shader_stages": []
+            }]
+        },
+        "swapchain": {
+            "type": "object",
+            "default": {},
+            "title": "swapchain",
+            "required": [
+                "color_attachment",
+                "depth_attachment"
+            ],
+            "properties": {
+                "color_attachment": {
+                    "type": "string",
+                    "default": "",
+                    "title": "color_attachment",
+                    "examples": [
+                        "color_attachment0"
+                    ]
+                },
+                "depth_attachment": {
+                    "type": "string",
+                    "default": "",
+                    "title": "depth_attachment",
+                    "examples": [
+                        "depth_attachment0"
+                    ]
+                }
+            },
+            "examples": [{
+                "color_attachment": "color_attachment0",
+                "depth_attachment": "depth_attachment0"
+            }]
+        },
+        "framebuffer": {
+            "type": "object",
+            "default": {},
+            "title": "framebuffer",
+            "required": [
+                "image_views",
+                "attachments"
+            ],
+            "properties": {
+                "image_views": {
+                    "type": "array",
+                    "default": [],
+                    "title": "image_views",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                },
+                "attachments": {
+                    "type": "array",
+                    "default": [],
+                    "title": "attachments",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                }
+            },
+            "examples": [{
+                "image_views": [],
+                "attachments": []
+            }]
+        }
+    },
+    "examples": [{
+        "schema": "vlk",
+        "config": {
+            "instance_name": "diesel vulkan",
+            "instance_version": "0.0.1",
+            "core_extensions": [
+                "VK_KHR_surface",
+                "VK_KHR_swapchain",
+                "VK_KHR_portability_subset"
+            ],
+            "user_extensions": [
+                "VK_KHR_device_group",
+                "VK_KHR_device_group_creation"
+            ],
+            "vulkan_layers": [
+                "VK_EXT_debug_report",
+                "VK_EXT_debg_util",
+                "VK_LAYER_KHRONOS_validation"
+            ],
+            "swapchain_size": 3,
+            "swapchains": [],
+            "window": {
+                "width": 1024,
+                "height": 1024
+            },
+            "device_mode": "VK_PIPELINE_BIND_POINT_GRAPHICS"
+        },
+        "pipelines": [],
+        "vertex_buffers": [],
+        "sampler_buffers": [],
+        "uniform_buffers": [],
+        "indice_buffers": [],
+        "shader_programs": [],
+        "renderpasses": [],
+        "command_buffers": [],
+        "queues": [],
+        "framebuffers": [],
+        "image": {
+            "name": "framebuffer_color_0",
+            "view_type": "VK_IMAGE_TYPE_2D",
+            "format": "VK_FORMAT_R8G8B8A8_SRGB",
+            "base_mip": 0,
+            "level_count": 1,
+            "base_array": 0,
+            "layer_count": 1,
+            "aspect_flags": "VK_ASPECT_FLAGS",
+            "tiling": "VK_IMAGE_TILING_OPTIMAL",
+            "is_per_frame": true,
+            "sampling": "VK_SAMPLE_COUNT_1_BIT",
+            "extent": {
+                "width": 1024,
+                "height": 1024
+            }
+        },
+        "queue": {
+            "name": "graphics_queue",
+            "index": 0,
+            "family": "graphics"
+        },
+        "command_buffer": {
+            "name": "cmd0",
+            "count": 1,
+            "level": "VK_COMMAND_BUFFER_LEVEL_PRIMARY",
+            "queue": "graphics_queue"
+        },
+        "image_attachment": {
+            "name": "color_attachment0",
+            "image_ref": "framebuffer_color_0",
+            "layout": "VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL",
+            "format": "VK_FORMAT_D32_SFLOAT",
+            "sample_count": "VK_SAMPLE_COUNT_1_BIT",
+            "load_op": "VK_ATTACHMENT_LOAD_OP_CLEAR",
+            "store_op": "VK_ATTACHMENT_STORE_OP_DONT_CARE",
+            "stencil_load_op": "VK_ATTACHEMNT_LOAD_OP_CLEAR",
+            "stencil_store_op": "VK_ATTACHMENT_STORE_OP_DONT_CARE",
+            "initial_layout": "VK_IMAGE_LAYOUT_UNDEFINED",
+            "final_layout": "VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL"
+        },
+        "subpass": {
+            "dependencies": [],
+            "bindpoint": "VK_PIPELINE_BIND_POINT_GRAPHICS",
+            "color_attachments": [],
+            "depth_attachments": [],
+            "input_attachments": [],
+            "preserve_attachments": []
+        },
+        "subpass_dependency": {
+            "name": "color",
+            "src_subpass": "VK_SUBPASS_EXTERNAL",
+            "dst_subpass": 0,
+            "src_mask": "VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT",
+            "src_access_mask": 0,
+            "dst_mask": "VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT",
+            "dst_access_mask": "VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT"
+        },
+        "renderpass": {
+            "name": "renderpass0",
+            "command_buffer": "cmd0",
+            "subpasses": []
+        },
+        "shader": {
+            "name": "program_0",
+            "sources": []
+        },
+        "source": {
+            "url": "test/vert.spv",
+            "type": "vertex"
+        },
+        "buffer": {
+            "name": "vtx_0",
+            "size": 576,
+            "element_size": 192,
+            "elements": 3,
+            "element_padded_size": 256,
+            "gpu_allocation_size": 768,
+            "offset": 0,
+            "format": "VK_FORMAT_R32G32B32_SFLOAT"
+        },
+        "pipeline": {
+            "name": "pipe0",
+            "renderpass": "renderpass0",
+            "subpass": 0,
+            "topology": "VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST",
+            "cull_mode": "VK_CULL_NONE",
+            "line_width": 1.0,
+            "front_face": "VK_FRONT_FACE_CLOCKWISE",
+            "program": "program_0",
+            "depth": {
+                "bias_constant": 0.0,
+                "bias_clamp": 0.0,
+                "bias_slope": 0.0
+            },
+            "mssa": {
+                "enable": false,
+                "bit_sample": "VK_SAMPLE_COUNT_1_BIT",
+                "min_sample_shading": 1.0,
+                "alpha_enable": false,
+                "alpha_one": false
+            },
+            "attachment_blend": {
+                "blend_mode": "VK_FALSE",
+                "write_mode": "VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT"
+            },
+            "mesh_descriptor": {
+                "name": "std_mesh",
+                "description": "Layout as follows, [vertex, normal, uv, color] with associated indices buffer and data is allocated in sequential blocks",
+                "indices_buffer": true,
+                "vertex_binding": {
+                    "binding": 0,
+                    "stride_bytes": 44,
+                    "rate": "VK_VERTEX_INPUT_RATE_VERTEX"
+                }
+            },
+            "pipeline_attributes": [],
+            "layouts": [],
+            "constants": []
+        },
+        "pipeline_attribute": {
+            "name": "vertex",
+            "binding": 0,
+            "location": 3,
+            "format": "VK_FORMAT_R32G32B32_SFLOAT",
+            "offset": 32
+        },
+        "descriptor_layout": {
+            "name": "layout_01",
+            "sets": 1,
+            "type": "uniform",
+            "binding": 0,
+            "shader_stages": [],
+            "uniform_buffer": "scene_uniforms"
+        },
+        "push_constant": {
+            "name": "instance",
+            "offset": 0,
+            "size": 4,
+            "shader_stages": []
+        },
+        "swapchain": {
+            "color_attachment": "color_attachment0",
+            "depth_attachment": "depth_attachment0"
+        },
+        "framebuffer": {
+            "image_views": [],
+            "attachments": []
+        }
+    }]
+}

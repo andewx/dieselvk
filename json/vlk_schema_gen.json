@@ -1,0 +1,189 @@
+{
+    "schema": "vlk",
+    "config": {
+        "instance_name": "diesel vulkan",
+        "instance_version": "0.0.1",
+        "core_extensions": [
+            "VK_KHR_surface",
+            "VK_KHR_swapchain",
+            "VK_KHR_portability_subset"
+        ],
+        "user_extensions": [
+            "VK_KHR_device_group",
+            "VK_KHR_device_group_creation"
+        ],
+        "vulkan_layers": [
+            "VK_EXT_debug_report",
+            "VK_EXT_debg_util",
+            "VK_LAYER_KHRONOS_validation"
+        ],
+        "swapchain_size": 3,
+        "swapchains": [],
+        "display":"true",
+        "window": {
+            "width": 1024,
+            "height": 1024
+        },
+        "device_mode": "Graphics",
+        "instances":[]
+    },
+    "pipelines": [],
+    "vertex_buffers": [],
+    "sampler_buffers": [],
+    "uniform_buffers": [],
+    "indice_buffers": [],
+    "shader_programs": [],
+    "renderpasses": [],
+    "command_buffers": [],
+    "queues": [],
+    "framebuffers":[],
+    "image": {
+        "name": "framebuffer_color_0",
+        "view_type": "VK_IMAGE_TYPE_2D",
+        "format": "VK_FORMAT_R8G8B8A8_SRGB",
+        "base_mip": 0,
+        "level_count": 1,
+        "base_array": 0,
+        "layer_count": 1,
+        "aspect_flags": "VK_ASPECT_FLAGS",
+        "tiling": "VK_IMAGE_TILING_OPTIMAL",
+        "is_per_frame": true,
+        "sampling": "VK_SAMPLE_COUNT_1_BIT",
+        "extent": {
+            "width": 1024,
+            "height": 1024
+        }
+    },
+    "queue": {
+        "name": "graphics_queue",
+        "index": 0,
+        "family": "graphics"
+    },
+    "command_buffer": {
+        "name": "cmd0",
+        "count": 1,
+        "level": "VK_COMMAND_BUFFER_LEVEL_PRIMARY",
+        "queue": "graphics_queue"
+    },
+    "image_attachment": {
+        "name": "color_attachment0",
+        "image_ref":"framebuffer_color_0",
+        "layout": "VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL",
+        "format": "VK_FORMAT_D32_SFLOAT",
+        "sample_count": "VK_SAMPLE_COUNT_1_BIT",
+        "load_op": "VK_ATTACHMENT_LOAD_OP_CLEAR",
+        "store_op": "VK_ATTACHMENT_STORE_OP_DONT_CARE",
+        "stencil_load_op": "VK_ATTACHEMNT_LOAD_OP_CLEAR",
+        "stencil_store_op": "VK_ATTACHMENT_STORE_OP_DONT_CARE",
+        "initial_layout": "VK_IMAGE_LAYOUT_UNDEFINED",
+        "final_layout": "VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL"
+    },
+    "subpass": {
+        "dependencies": [],
+        "bindpoint": "VK_PIPELINE_BIND_POINT_GRAPHICS",
+        "color_attachments": [],
+        "depth_attachments": [],
+        "input_attachments": [],
+        "preserve_attachments": []
+    },
+    "subpass_dependency": {
+        "name": "color",
+        "src_subpass": "VK_SUBPASS_EXTERNAL",
+        "dst_subpass": 0,
+        "src_mask": "VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT",
+        "src_access_mask": 0,
+        "dst_mask": "VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT",
+        "dst_access_mask": "VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT"
+    },
+    "renderpass": {
+        "name": "renderpass0",
+        "command_buffer": "cmd0",
+        "subpasses": []
+    },
+    "shader": {
+        "name": "program_0",
+        "sources": []
+    },
+    "source": {
+        "url": "test/vert.spv",
+        "type": "vertex"
+    },
+    "buffer": {
+        "name": "vtx_0",
+        "size": 576,
+        "element_size": 192,
+        "elements": 3,
+        "element_padded_size": 256,
+        "gpu_allocation_size": 768,
+        "offset": 0,
+        "format": "VK_FORMAT_R32G32B32_SFLOAT"
+    },
+    "pipeline": {
+        "name": "pipe0",
+        "renderpass": "renderpass0",
+        "subpass": 0,
+        "topology": "VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST",
+        "cull_mode": "VK_CULL_NONE",
+        "line_width": 1.0,
+        "front_face": "VK_FRONT_FACE_CLOCKWISE",
+        "program": "program_0",
+        "depth": {
+            "bias_constant": 0.0,
+            "bias_clamp": 0.0,
+            "bias_slope": 0.0
+        },
+        "mssa": {
+            "enable": false,
+            "bit_sample": "VK_SAMPLE_COUNT_1_BIT",
+            "min_sample_shading": 1.0,
+            "alpha_enable": false,
+            "alpha_one": false
+        },
+        "attachment_blend": {
+            "blend_mode": "VK_FALSE",
+            "write_mode": "VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT"
+        },
+        "mesh_descriptor": {
+            "name": "std_mesh",
+            "description": "Layout as follows, [vertex, normal, uv, color] with associated indices buffer and data is allocated in sequential blocks",
+            "indices_buffer": true,
+            "vertex_binding": {
+                "binding": 0,
+                "stride_bytes": 44,
+                "rate": "VK_VERTEX_INPUT_RATE_VERTEX"
+            }
+        },
+        "pipeline_attributes": [],
+        "layouts": [],
+        "constants": []
+    },
+    "pipeline_attribute": {
+        "name":"vertex",
+        "binding": 0,
+        "location": 3,
+        "format": "VK_FORMAT_R32G32B32_SFLOAT",
+        "offset": 32
+    },
+    "descriptor_layout": {
+        "name": "layout_01",
+        "sets": 1,
+        "type": "uniform",
+        "binding": 0,
+        "shader_stages": [],
+        "uniform_buffer": "scene_uniforms"
+    },
+    "push_constant": {
+        "name": "instance",
+        "offset": 0,
+        "size": 4,
+        "shader_stages": []
+    },
+    "swapchain":{
+        "color_attachment":"color_attachment0",
+        "depth_attachment":"depth_attachment0"
+    },
+    "framebuffer":{
+        "image_views":[],
+        "attachments":[]
+    }
+}

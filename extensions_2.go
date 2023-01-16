@@ -1,6 +1,14 @@
 package dieselvk
 
-import vk "github.com/vulkan-go/vulkan"
+import (
+	vk "github.com/vulkan-go/vulkan"
+)
+
+/* Just make extensions checker a global thing because this is confusing for the config :D
+func CheckExtensions(vlk json.Vlk, gpu vk.PhysicalDevice)([]string){
+	missing := []string{}
+}
+*/
 
 type BaseInstanceExtensions struct {
 	wanted   []string

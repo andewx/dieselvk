@@ -31,47 +31,6 @@ type PerFrame struct {
 
 var update_step float32
 
-func NewPerFrame(core *CoreRenderInstance, frame int) (PerFrame, error) {
-	var err error
-	m_frame := PerFrame{}
-
-	m_frame.command = make([]vk.CommandBuffer, 1)
-	m_frame.fence = make([]vk.Fence, 1)
-	m_frame.image_acquired = make([]vk.Semaphore, 1)
-	m_frame.queue_complete = make([]vk.Semaphore, 1)
-	m_frame.pool, err = NewCorePool(&core.logical_device.handle, core.render_queue_family)
-
-	//Command buffers
-	vk.AllocateCommandBuffers(core.logical_device.handle, &vk.CommandBufferAllocateInfo{
-		SType:              vk.StructureTypeCommandBufferAllocateInfo,
-		CommandPool:        m_frame.pool.pool,
-		Level:              vk.CommandBufferLevelPrimary,
-		CommandBufferCount: uint32(1),
-	}, m_frame.command)
-
-	//Create Fence
-	vk.CreateFence(core.logical_device.handle, &vk.FenceCreateInfo{
-		SType: vk.StructureTypeFenceCreateInfo,
-		PNext: nil,
-		Flags: vk.FenceCreateFlags(vk.FenceCreateSignaledBit),
-	}, nil, &m_frame.fence[0])
-
-	//Create Semaphores
-	vk.CreateSemaphore(core.logical_device.handle, &vk.SemaphoreCreateInfo{
-		SType: vk.StructureTypeSemaphoreCreateInfo,
-		Flags: vk.SemaphoreCreateFlags(0x00000000),
-	}, nil, &m_frame.image_acquired[0])
-
-	//Create Semaphores
-	vk.CreateSemaphore(core.logical_device.handle, &vk.SemaphoreCreateInfo{
-		SType: vk.StructureTypeSemaphoreCreateInfo,
-		Flags: vk.SemaphoreCreateFlags(0x00000000),
-	}, nil, &m_frame.queue_complete[0])
-
-	return m_frame, err
-
-}
-
 //Core instance API interface
 type CoreInstance interface {
 	AddPipeline(name string, program string, buffer CoreBuffer, renderpass string) *CorePipeline
@@ -141,15 +100,52 @@ type CoreRenderInstance struct {
 	pconstant []SPIRV_Constants
 }
 
+func NewPerFrame(core *CoreRenderInstance, frame int) (PerFrame, error) {
+	var err error
+	m_frame := PerFrame{}
+
+	m_frame.command = make([]vk.CommandBuffer, 1)
+	m_frame.fence = make([]vk.Fence, 1)
+	m_frame.image_acquired = make([]vk.Semaphore, 1)
+	m_frame.queue_complete = make([]vk.Semaphore, 1)
+	m_frame.pool, err = NewCorePool(&core.logical_device.handle, core.render_queue_family)
+
+	//Command buffers
+	vk.AllocateCommandBuffers(core.logical_device.handle, &vk.CommandBufferAllocateInfo{
+		SType:              vk.StructureTypeCommandBufferAllocateInfo,
+		CommandPool:        m_frame.pool.pool,
+		Level:              vk.CommandBufferLevelPrimary,
+		CommandBufferCount: uint32(1),
+	}, m_frame.command)
+
+	//Create Fence
+	vk.CreateFence(core.logical_device.handle, &vk.FenceCreateInfo{
+		SType: vk.StructureTypeFenceCreateInfo,
+		PNext: nil,
+		Flags: vk.FenceCreateFlags(vk.FenceCreateSignaledBit),
+	}, nil, &m_frame.fence[0])
+
+	//Create Semaphores
+	vk.CreateSemaphore(core.logical_device.handle, &vk.SemaphoreCreateInfo{
+		SType: vk.StructureTypeSemaphoreCreateInfo,
+		Flags: vk.SemaphoreCreateFlags(0x00000000),
+	}, nil, &m_frame.image_acquired[0])
+
+	//Create Semaphores
+	vk.CreateSemaphore(core.logical_device.handle, &vk.SemaphoreCreateInfo{
+		SType: vk.StructureTypeSemaphoreCreateInfo,
+		Flags: vk.SemaphoreCreateFlags(0x00000000),
+	}, nil, &m_frame.queue_complete[0])
+
+	return m_frame, err
+
+}
+
 //Creates a new core instance from the given structure and attaches the instance to a primary graphics compatbible device
-func NewCoreRenderInstance(instance vk.Instance, name string, instance_exenstions BaseInstanceExtensions, validation_extensions BaseLayerExtensions, device_extensions []string, display *CoreDisplay) (*CoreRenderInstance, error) {
+func NewCoreRenderInstance(instance vk.Instance, name string, display *CoreDisplay) (*CoreRenderInstance, error) {
 	var core CoreRenderInstance
 	var err error
 	update_step = 0.01
-
-	//Core Extensions
-	core.instance_extensions = instance_exenstions
-	core.validation_layers = validation_extensions
 
 	core.display = display
 	core.instance = &instance
@@ -165,16 +161,15 @@ func NewCoreRenderInstance(instance vk.Instance, name string, instance_exenstion
 	core.global_descriptor_layouts = make(map[string][]vk.DescriptorSetLayout)
 
 	core.pconstant = make([]SPIRV_Constants, 1)
-
 	core.shaders = NewCoreShader()
 
-	if display.surface == nil {
-		surfPtr, err := display.window.CreateWindowSurface(instance, nil)
+	if core.display.surface == nil {
+		surfPtr, err := core.display.window.CreateWindowSurface(instance, nil)
 		if err != nil {
 			fmt.Printf("Error creating window surface object")
-			display.surface = vk.NullSurface
+			core.display.surface = vk.NullSurface
 		}
-		display.surface = vk.SurfaceFromPointer(surfPtr)
+		core.display.surface = vk.SurfaceFromPointer(surfPtr)
 	}
 
 	var gpu_count uint32
@@ -215,7 +210,7 @@ func NewCoreRenderInstance(instance vk.Instance, name string, instance_exenstion
 	}
 
 	//Load in extensions
-	core.device_extensions = *NewBaseDeviceExtensions(device_extensions, []string{}, core.logical_device.selected_device)
+	core.device_extensions = *NewBaseDeviceExtensions(append(Vlk.Config.CoreExtensions, Vlk.Config.UserExtensions...), []string{}, core.logical_device.selected_device)
 
 	//Gather device properties
 	vk.GetPhysicalDeviceProperties(core.logical_device.selected_device, core.logical_device.selected_device_properties)
