@@ -3,6 +3,7 @@ package dieselvk
 import (
 	"fmt"
 	"os"
+	"strings"
 	"unsafe"
 
 	vk "github.com/vulkan-go/vulkan"
@@ -19,7 +20,7 @@ type SPIRV_Constants struct {
 	frame_delta float32
 }
 
-//Swapchain synchronization
+// Swapchain synchronization
 type PerFrame struct {
 	pool                  *CorePool
 	command               []vk.CommandBuffer
@@ -31,7 +32,7 @@ type PerFrame struct {
 
 var update_step float32
 
-//Core instance API interface
+// Core instance API interface
 type CoreInstance interface {
 	AddPipeline(name string, program string, buffer CoreBuffer, renderpass string) *CorePipeline
 	AddShaderPath(path string, shader_type int)
@@ -55,12 +56,12 @@ type CoreInstance interface {
 type CoreRenderInstance struct {
 
 	//Instances
-	instance            *vk.Instance
-	instance_extensions BaseInstanceExtensions
-	device_extensions   BaseDeviceExtensions
-	validation_layers   BaseLayerExtensions
-	name                string
-	allocator           *CoreAllocator
+	instance *vk.Instance
+	//instance_extensions BaseInstanceExtensions
+	//device_extensions   BaseDeviceExtensions
+	//validation_layers   BaseLayerExtensions
+	name      string
+	allocator *CoreAllocator
 
 	//Single Logical Device for the instance
 	logical_device      *CoreDevice
@@ -141,7 +142,7 @@ func NewPerFrame(core *CoreRenderInstance, frame int) (PerFrame, error) {
 
 }
 
-//Creates a new core instance from the given structure and attaches the instance to a primary graphics compatbible device
+// Creates a new core instance from the given structure and attaches the instance to a primary graphics compatbible device
 func NewCoreRenderInstance(instance vk.Instance, name string, display *CoreDisplay) (*CoreRenderInstance, error) {
 	var core CoreRenderInstance
 	var err error
@@ -210,7 +211,11 @@ func NewCoreRenderInstance(instance vk.Instance, name string, display *CoreDispl
 	}
 
 	//Load in extensions
-	core.device_extensions = *NewBaseDeviceExtensions(append(Vlk.Config.CoreExtensions, Vlk.Config.UserExtensions...), []string{}, core.logical_device.selected_device)
+	missing := ValidateDeviceExtensions(Vlk, core.logical_device.selected_device)
+
+	if len(missing) > 0 {
+		ErrorLog.Fatalf("Error could not find device extensions\n%s", strings.Join(Vlk.Config.DeviceExtensions, "\n"))
+	}
 
 	//Gather device properties
 	vk.GetPhysicalDeviceProperties(core.logical_device.selected_device, core.logical_device.selected_device_properties)
@@ -218,20 +223,10 @@ func NewCoreRenderInstance(instance vk.Instance, name string, display *CoreDispl
 	vk.GetPhysicalDeviceMemoryProperties(core.logical_device.selected_device, core.logical_device.selected_device_memory_properties)
 	core.logical_device.selected_device_memory_properties.Deref()
 
-	// Select device extensions
-	core.device_extensions = *NewBaseDeviceExtensions(core.device_extensions.wanted, []string{}, core.logical_device.selected_device)
-	has_extensions, ext_string := core.device_extensions.HasWanted()
-
-	if !has_extensions {
-		fmt.Printf("Vulkan Missing Device Extensions %s", ext_string)
-	} else {
-		fmt.Printf("Vulkan Device Extensions loaded...\n")
-	}
-
 	//Bind the suitable device with assigned queues
 	core.queues = NewCoreQueue(core.logical_device.selected_device, core.name)
 	queue_infos := core.queues.GetCreateInfos()
-	dev_extensions := core.device_extensions.GetExtensions()
+	dev_extensions := Vlk.Config.DeviceExtensions
 
 	//Create Device
 	var device vk.Device
@@ -241,8 +236,8 @@ func NewCoreRenderInstance(instance vk.Instance, name string, display *CoreDispl
 		PQueueCreateInfos:       queue_infos,
 		EnabledExtensionCount:   uint32(len(dev_extensions)),
 		PpEnabledExtensionNames: safeStrings(dev_extensions),
-		EnabledLayerCount:       uint32(len(core.validation_layers.GetExtensions())),
-		PpEnabledLayerNames:     safeStrings(core.validation_layers.GetExtensions()),
+		EnabledLayerCount:       uint32(len(Vlk.Config.VulkanLayers)),
+		PpEnabledLayerNames:     safeStrings(Vlk.Config.VulkanLayers),
 	}, nil, &device)
 
 	if ret != vk.Success {
@@ -340,7 +335,7 @@ func (core *CoreRenderInstance) GetLayoutBuffers() map[string]*CoreBuffer {
 	return core.uniform_buffers
 }
 
-//Active uniform buffers are bound to the descriptor sets and given
+// Active uniform buffers are bound to the descriptor sets and given
 func (core *CoreRenderInstance) BindUniforms(uniforms map[string]*CoreBuffer, binding []int) error {
 
 	for index := 0; index < 3; index++ {
@@ -376,7 +371,7 @@ func (core *CoreRenderInstance) AddRenderPass(name string) *CoreRenderPass {
 	return core.renderpasses[name]
 }
 
-//Adds a pipline to this existing instance and builds a pipeline based on the given program identifier and a buffer which represents the expected vertex input for the pipeline
+// Adds a pipline to this existing instance and builds a pipeline based on the given program identifier and a buffer which represents the expected vertex input for the pipeline
 func (core *CoreRenderInstance) AddPipeline(name string, program_name string, buffer CoreBuffer, pass string) *CorePipeline {
 	core.Builders[name] = NewPipelineBuilder(core, core.shaders.shader_programs[program_name], *buffer.prototype.GetInputDescription())
 	core.pipeline.pipelines[name] = core.Builders[name].BuildPipeline(core, pass, core.display, core.pipeline.layouts[name])

@@ -17,6 +17,9 @@
             "VK_EXT_debg_util",
             "VK_LAYER_KHRONOS_validation"
         ],
+        "device_extensions":[
+            "VK_EXT_memory_budget"
+        ],
         "swapchain_size": 3,
         "swapchains": [],
         "display":"true",

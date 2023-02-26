@@ -48,9 +48,9 @@ func TestAllocate(t *testing.T) {
 	//Vulkan Desired Instances
 	instances := make([]dieselvk.Instance, 1)
 	instances[0] = dieselvk.Instance{Name: "default", Selector: dieselvk.DEVICE_INSTANCE, Gpu_id: 0}
-	vulkan_core := dieselvk.NewBaseCore(config, "default", 5, 5, nil)
-	vulkan_core.CreateInstance(instances)
-	render := vulkan_core.GetInstance("default").(*dieselvk.CoreDeviceInstance)
+	vulkan_core := dieselvk.NewBaseCore("json/vlk_example.json", "default", nil)
+	vulkan_core.CreateInstance()
+	render := vulkan_core.GetInstance()
 
 	//Configue instance shaders
 	render.AddShaderPath(shaders[0], dieselvk.FRAG)

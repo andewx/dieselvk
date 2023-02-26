@@ -34,16 +34,17 @@ type CommandBuffer struct {
 
 // Config
 type Config struct {
-	CoreExtensions  []string    `json:"core_extensions"`
-	DeviceMode      string      `json:"device_mode"`
-	InstanceName    string      `json:"instance_name"`
-	InstanceVersion string      `json:"instance_version"`
-	SwapchainSize   int         `json:"swapchain_size"`
-	Swapchains      []Swapchain `json:"swapchains"`
-	UserExtensions  []string    `json:"user_extensions"`
-	VulkanLayers    []string    `json:"vulkan_layers"`
-	Display         string      `json:"display"`
-	Window          *Window     `json:"window"`
+	CoreExtensions   []string    `json:"core_extensions"`
+	DeviceMode       string      `json:"device_mode"`
+	InstanceName     string      `json:"instance_name"`
+	InstanceVersion  string      `json:"instance_version"`
+	SwapchainSize    int         `json:"swapchain_size"`
+	Swapchains       []Swapchain `json:"swapchains"`
+	UserExtensions   []string    `json:"user_extensions"`
+	DeviceExtensions []string    `json:"device_extensions"`
+	VulkanLayers     []string    `json:"vulkan_layers"`
+	Display          string      `json:"display"`
+	Window           *Window     `json:"window"`
 }
 
 // Depth
@@ -655,6 +656,19 @@ func (strct *Config) MarshalJSON() ([]byte, error) {
 		buf.Write(tmp)
 	}
 	comma = true
+	// "DeviceExtensions" field is required
+	// only required object types supported for marshal checking (for now)
+	// Marshal the "user_extensions" field
+	if comma {
+		buf.WriteString(",")
+	}
+	buf.WriteString("\"device_extensions\": ")
+	if tmp, err := json.Marshal(strct.DeviceExtensions); err != nil {
+		return nil, err
+	} else {
+		buf.Write(tmp)
+	}
+	comma = true
 	// "VulkanLayers" field is required
 	// only required object types supported for marshal checking (for now)
 	// Marshal the "vulkan_layers" field
@@ -698,6 +712,7 @@ func (strct *Config) UnmarshalJSON(b []byte) error {
 	swapchainsReceived := false
 	user_extensionsReceived := false
 	vulkan_layersReceived := false
+	device_extensionsReceived := false
 	windowReceived := false
 	var jsonMap map[string]json.RawMessage
 	if err := json.Unmarshal(b, &jsonMap); err != nil {
@@ -741,6 +756,11 @@ func (strct *Config) UnmarshalJSON(b []byte) error {
 				return err
 			}
 			user_extensionsReceived = true
+		case "device_extensions":
+			if err := json.Unmarshal([]byte(v), &strct.DeviceExtensions); err != nil {
+				return err
+			}
+			device_extensionsReceived = true
 		case "vulkan_layers":
 			if err := json.Unmarshal([]byte(v), &strct.VulkanLayers); err != nil {
 				return err
@@ -776,6 +796,9 @@ func (strct *Config) UnmarshalJSON(b []byte) error {
 	// check if swapchain_size (a required property) was received
 	if !swapchain_sizeReceived {
 		return errors.New("Config  \"swapchain_size\" is required but was not present")
+	}
+	if !device_extensionsReceived {
+		return errors.New("Config  \"device_extensions\" is required but was not present")
 	}
 	// check if swapchains (a required property) was received
 	if !swapchainsReceived {

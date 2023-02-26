@@ -4,21 +4,19 @@
 
 -`dieselvk.Core`
 
-- Core should be treated as a Vulkan instance configuration object in reference to extensions and device properties
+- Diesel Vulkan initializes entire Vulkan Instance from a Vlk Json Schema. See the [schema](json/vlk_schema.json) document and the [example](json/vlk_example.json) for examples on how to set up a configured instance. A global `Vlk` variable holds the configuration values.
 
-```config := make(map[string]string, 10)
-	config["display"] = "true"
+- Global `Dictionary` variable also is used to convert the Json configuration file stored strings which represent Vulkan Enumerations into ints. To use this value for example we can call
+
+```
+my_int := Dictionary.Get(Vlk.Piplelines.Topology)
 ```
 
-- Other config["example_key"] configurations can be user defined of course and passed to the public functions available through the BaseCore or BaseCore extension implementations.
+- For now we haven't yet implemented general struct encoding/decoding into byte arrays in a way that can be used by the cgo backend so all data passed to Vulkan in buffers should be in the form of golang arrays or single scalars via `Ptr()` utility function. For example `[]float32, []int32...` Once everything is more or less in place we will revisit these issues.
 
-- Note that most `diesel.vk` access is deemed to be private access only except for the `BaseCore` implementation. Also although certain implicit interfaces may exist...i.e CoreRenderInstasnce & CoreComputeInstance there is no publicly declared interfaces. If you need interface support for objects it is suggested you fork and extend.
+>Please be aware that DieselVK is still in a pre-alpha build and therefore may be considered highly unstable. It is recommended that users only **fork** this repository at the moment.
 
-- Currently the platforming delineates only between Linux/OSX purely by enforcing that Metal extensions are loaded when the platform is detected as "Darwin". If you need Windows support and additional cross-platforming string paths library should be added on.
-
-- Project is in early stages and is a forked refactor of `vulkan-go/asche`
-
-- For now we haven't yet implemented general struct encoding/decoding into byte arrays in a way that can be used by the cgo backend so all data passed to Vulkan in buffers should be in the form of golang arrays or single scalars via `Ptr()` utility function. For example `[]float32, []int32...` Once everything is more or less in place we will revisit these issues. For the time being feel free to report other issues.
+> Additionally documentation is very limited but hopefully is taken care of after the first Alpha release.
 
 ---------------------
 
@@ -26,17 +24,13 @@
 
 `dieselvk.BaseCore`
 
-- GPU entry point and vulkan extension loader. Specifies bounds of application GPU feature requests and underlying API usage. Some  functions may be public where public functions are open for reinterpretation We force GLFW usage and have the core handle window creation and glfw instance handling as well. The core will also enumerate all available queues / command pools / buffers / memory allocation. So core is also a core manager which the instance implementation calls on. The core provides the interface along with the high level /destruction implementation of common vulkan objects. The diesel vk core also is responsible for initialization of core resources (includes queues / command pools / command buffers / devices and core memory. And all objects are held in mapped `map[string]type` objects.
+- Application entry point and manages the creation of Vulkan instances and any neccessary setup or configuration.
 
 -`dieselvk.CoreRenderInstance`
 
-  - Instances should be viewed as the main Vulkan interface for low level interaction with the GPU. Higher level graphics engines and routines
-  use this API as the GPU host client interface. Underlying the Core Render Instance is a non-mutable Swapchain/Framebuffer presentation engine
+  - Core render instance hosts the entire GPU rendering driver context and is the lifetime instance for a Vulkan program. The instance host all other peer modules as resources as they are needed and is responsible for the integration of those resources into rendering operations. 
 
-  -  Paramaterizes basic Vulkan constructs such as desired context of the underlying engine. Tracks multiple physical devices and capabilities and provides access to the desired physical / logical device units / enumerates their capabilities / specifies multi-gpu workloads / specifies compute work group/local group sizing for compute specific instances.
-
-  - The instance is a specific implementation after the core initialization, which is mostly involved with enumerating desired extensions and vulkan wide resources.
-
+  - Much of what the CoreRenderInstance does will be dependent on the Configuration values in the supplied Json Schema file. *Be prepared that certain configurations may be invalid without a specific error or warning unless validaiton layers exist*.
 
 -`dieselvk.CoreQueue`- Provides high level queue operation control and manages queue operations. Provides reliable access to reproducible queues, queries their states, and list their properties for the underlying `Core/Instance` implementations
 
@@ -52,7 +46,7 @@
 
 -`dieselvk.CoreSwapchain`- Creates swapchain instance + associated swap chain images. Holds swapchain image view refences. Holds and request Displace surfaces if requested. Manages swap chain fencing and semaphores for frame requests. Provides framebuffer references with default depth + color attachments. Holds desired VSYNC rates if desired.
 
--`dieselvk.CoreMemory` - Provides GPU/Host memory allocation callbacks and maps allocators to GoLang slices and types
+-`dieselvk.CoreAllocator` - This provides a sub-allocator and resource management object to the instance. Allocations can be done with `Allocate()` and `Map()` functions which sub allocate Vulkan memory, has the benefit of allowing for GPU memory tracking and memory management techniques. 
 
 -`dieselvk.CoreBuffers` - Provides High level buffer allocation routines and allows gathering references for shader/pipelines.
 

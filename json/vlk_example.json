@@ -1,12 +1,15 @@
 {
     "schema": "vlk",
     "config" : {
-        "instance_name":"diesel vulkan",
+        "instance_name":"diesel vulkan macosx",
         "instance_version": "0.0.1",
         "core_extensions":[
             "VK_KHR_surface",
             "VK_KHR_swapchain",
-            "VK_KHR_portability_subset"
+            "VK_KHR_portability_subset",
+            "VK_MVK_macos_surface",
+            "VK_EXT_metal_surface",
+            "VK_KHR_portability_enumeration"
         ],
         "user_extensions":[
             "VK_KHR_device_group",

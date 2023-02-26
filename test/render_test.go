@@ -56,22 +56,12 @@ func TestRender(t *testing.T) {
 		dirs + "/shaders/vert.spv",
 	}
 
-	//Vulkan Core Config
-	config := make(map[string]string, 10)
-	config["extensions"] = "default"
-	config["display"] = "true"
-	config["debug"] = "false"
-	config["gpu_exclusive_instance"] = "true"
-	config["validation"] = "VK_LAYER_KHRONOS_validation"
-
 	//Vulkan Desired Instances
-	instances := make([]dieselvk.Instance, 1)
-	instances[0] = dieselvk.Instance{Name: "default", Selector: dieselvk.RENDER_INSTANCE, Gpu_id: 0}
-	vulkan_core := dieselvk.NewBaseCore(config, "default", 5, 5, window)
-	if err := vulkan_core.CreateInstance(instances); err != nil {
+	vulkan_core := dieselvk.NewBaseCore("json/vlk_example.json", "default", window)
+	if err := vulkan_core.CreateInstance(); err != nil {
 		t.Errorf("Error could not create instance")
 	}
-	render := vulkan_core.GetInstance("default").(*dieselvk.CoreRenderInstance)
+	render := vulkan_core.GetInstance()
 
 	//Create shaders
 	render.AddShaderPath(shaders[0], dieselvk.FRAG)

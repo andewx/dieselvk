@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/andewx/dieselvk/json"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	vk "github.com/vulkan-go/vulkan"
 )
@@ -20,7 +19,7 @@ type Resource interface {
 	Release()
 }
 
-//Global Constants
+// Global Constants
 const (
 	RENDER_INSTANCE  = 0
 	DEVICE_INSTANCE  = 1
@@ -28,33 +27,26 @@ const (
 	MIN_ALLOC        = 10
 )
 
-//Base DieselVK Core vulkan manager with GLFW native host management
-//Core structure properties are private members to enforce future interface
-//compliance with outside packages. The Vulkan core manager manages the availability
-//of devices and capabilities to enfore instance creation and management. Also holds
-//global type information which could be useful to multiple vulkan instances in an application
-//which includes buffers and textures. Light objects in Vulkan do not always warrant a Core Abstraction
+// Base DieselVK Core vulkan manager with GLFW native host management
+// Core structure properties are private members to enforce future interface
+// compliance with outside packages. The Vulkan core manager manages the availability
+// of devices and capabilities to enfore instance creation and management. Also holds
+// global type information which could be useful to multiple vulkan instances in an application
+// which includes buffers and textures. Light objects in Vulkan do not always warrant a Core Abstraction
 type BaseCore struct {
 
 	//Core Implementation Context Properties
 	display CoreDisplay
-	name    string
+	Name    string
 
-	//Map string id & tagging
-	instance_names []string
-
-	//List of device bidings
+	//List of device bindings
 	logical_devices map[string]CoreDevice
 
-	//Per Instance/Device Handles where key is the instance global id key used for accessing other held resources
-	instances map[string]CoreInstance //Key: (Instance_Name) Value: Vulkan Instance
-
-	BaseExtensionLoader *BaseInstanceExtensions
-	BaseDeviceLoader    *BaseDeviceExtensions
-	BaseLayerLoader     *BaseLayerExtensions
+	//Single instance handle
+	instance CoreInstance
 }
 
-//Instanitates a new core context allocation sizes, default allocation prevents buffer copies but is just used to instantiate map members
+// Instanitates a new core context allocation sizes, default allocation prevents buffer copies but is just used to instantiate map members
 func NewBaseCore(json_file string, instance_name string, window *glfw.Window) *BaseCore {
 	var core BaseCore
 
@@ -78,20 +70,20 @@ func NewBaseCore(json_file string, instance_name string, window *glfw.Window) *B
 	ErrorLog = log.New(error_file, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
 	WarnLog = log.New(warn_file, "WARNING: ", log.Ldate|log.Ltime|log.Lshortfile)
 
-	//Derive and potentially verify the configuration file
-	Dictionary = json.InitDictionary()
+	//Open VLK Json Configuration file into global vars {Vlk, Dictionary}
 	if contents, file_err := ioutil.ReadFile(json_file); file_err != nil {
 		ErrorLog.Fatal(file_err)
 	} else {
-		Vlk.UnmarshalJSON(contents)
+		json_err := Vlk.UnmarshalJSON(contents)
+		if json_err != nil {
+			ErrorLog.Fatal(json_err)
+		}
 	}
 
-	core.instance_names = []string{instance_name}
-	core.name = instance_name
-
+	core.Name = instance_name
 	core.logical_devices = make(map[string]CoreDevice, MIN_ALLOC)
-	core.instances = make(map[string]CoreInstance, MIN_ALLOC)
 
+	//Setup the window structs
 	if window != nil && Vlk.Config.Display == "true" {
 		core.display = CoreDisplay{
 			window: window,
@@ -101,13 +93,15 @@ func NewBaseCore(json_file string, instance_name string, window *glfw.Window) *B
 	return &core
 }
 
-func (base *BaseCore) Release() {
-	for _, inst := range base.instances {
-		inst.Destroy()
-	}
+func (base *BaseCore) GetExtensions() []string {
+	return append(Vlk.Config.CoreExtensions, Vlk.Config.UserExtensions...)
 }
 
-func (base *BaseCore) CreateInstance(instances []Instance) error {
+func (base *BaseCore) Release() {
+	base.instance.Destroy()
+}
+
+func (base *BaseCore) CreateInstance() error {
 	var err error
 
 	//Create instance
@@ -119,68 +113,57 @@ func (base *BaseCore) CreateInstance(instances []Instance) error {
 		flags = vk.InstanceCreateFlags(0)
 	}
 
-	for _, ref := range instances {
-		ret := vk.CreateInstance(&vk.InstanceCreateInfo{
-			SType: vk.StructureTypeInstanceCreateInfo,
-			PApplicationInfo: &vk.ApplicationInfo{
-				SType:              vk.StructureTypeApplicationInfo,
-				ApiVersion:         uint32(vk.MakeVersion(1, 1, 0)),
-				ApplicationVersion: uint32(vk.MakeVersion(1, 1, 0)),
-				PApplicationName:   safeString(ref.Name),
-				PEngineName:        base.name + "\x00",
-			},
-			EnabledExtensionCount:   uint32(len(base.GetInstanceExtensions())),
-			PpEnabledExtensionNames: safeStrings(base.GetInstanceExtensions()),
-			EnabledLayerCount:       uint32(len(Vlk.Config.VulkanLayers)),
-			PpEnabledLayerNames:     safeStrings(Vlk.Config.VulkanLayers),
-			Flags:                   flags,
-		}, nil, &instance)
+	//Validate Extensions/Devices/Layers
+	var missing []string
+	missing = ValidateExtensions(Vlk)
+	missing = append(missing, ValidateLayers(Vlk)...)
 
-		if ret != vk.Success {
-			ErrorLog.Fatalf("Error creating instance with required extensions\n")
+	//Handle missing Extensions Case
+	if len(missing) > 0 {
+		var accum string
+		for _, str := range missing {
+			accum += str + "\n"
 		}
+		ErrorLog.Fatalf("Could not instantiate a device the following extensions or errors occured\n%s", accum)
+	}
 
-		if PlatformOS == "Darwin" {
-			vk.InitInstance(instance)
-		}
+	ret := vk.CreateInstance(&vk.InstanceCreateInfo{
+		SType: vk.StructureTypeInstanceCreateInfo,
+		PApplicationInfo: &vk.ApplicationInfo{
+			SType:              vk.StructureTypeApplicationInfo,
+			ApiVersion:         uint32(vk.MakeVersion(1, 1, 0)),
+			ApplicationVersion: uint32(vk.MakeVersion(1, 1, 0)),
+			PApplicationName:   safeString(base.Name),
+			PEngineName:        base.Name + "\x00",
+		},
+		EnabledExtensionCount:   uint32(len(base.GetExtensions())),
+		PpEnabledExtensionNames: safeStrings(base.GetExtensions()),
+		EnabledLayerCount:       uint32(len(Vlk.Config.VulkanLayers)),
+		PpEnabledLayerNames:     safeStrings(Vlk.Config.VulkanLayers),
+		Flags:                   flags,
+	}, nil, &instance)
 
-		if ref.Selector == RENDER_INSTANCE {
-			base.instances[ref.Name], err = NewCoreRenderInstance(instance, base.instance_names[0], &base.display)
-		}
+	if ret != vk.Success {
+		ErrorLog.Fatalf("Error creating instance with required extensions\n")
+	}
 
-		if ref.Selector == DEVICE_INSTANCE {
-			//	base.instances[ref.Name], err = NewCoreDeviceInstance(instance, base.instance_names[0], *inst_ext, *layer_ext, api_device)
-		}
+	if PlatformOS == "Darwin" {
+		vk.InitInstance(instance)
+	}
 
-		if err != nil {
-			ErrorLog.Print(err)
-			return err
-		}
+	base.instance, err = NewCoreRenderInstance(instance, base.Name, &base.display)
 
+	if err != nil {
+		ErrorLog.Fatal(err)
+		return err
 	}
 
 	if err != nil {
-		ErrorLog.Print(err)
+		ErrorLog.Fatal(err)
 	}
 	return nil
 }
 
-func (base *BaseCore) GetInstance(name string) CoreInstance {
-	return base.instances[name]
-}
-
-func (base *BaseCore) GetValidationLayers() []string {
-	return Vlk.Config.VulkanLayers
-}
-
-func (base *BaseCore) GetInstanceExtensions() []string {
-	var darwin_extensions []string
-	core_extensions := Vlk.Config.CoreExtensions
-
-	if PlatformOS == "Darwin" {
-		darwin_extensions = []string{"VK_MVK_macos_surface", "VK_EXT_metal_surface", "VK_KHR_portability_enumeration"}
-	}
-
-	ext := append(core_extensions, darwin_extensions...)
-	return ext
+func (base *BaseCore) GetInstance() CoreInstance {
+	return base.instance
 }

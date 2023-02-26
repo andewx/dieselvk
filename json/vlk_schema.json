@@ -117,6 +117,23 @@
                         ]
                     ]
                 },
+                "device_extensions": {
+                    "type": "array",
+                    "default": [],
+                    "title": "device_extensions",
+                    "items": {
+                        "type": "string",
+                        "title": "A",
+                        "examples": [
+                            "VK_EXT_memory_budget"
+                        ]
+                    },
+                    "examples": [
+                        [
+                            "VK_EXT_memory_budget"
+                        ]
+                    ]
+                },
                 "swapchain_size": {
                     "type": "integer",
                     "default": 0,

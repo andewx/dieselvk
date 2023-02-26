@@ -1,234 +1,85 @@
 package dieselvk
 
 import (
+	"github.com/andewx/dieselvk/json"
 	vk "github.com/vulkan-go/vulkan"
 )
 
-/* Just make extensions checker a global thing because this is confusing for the config :D
-func CheckExtensions(vlk json.Vlk, gpu vk.PhysicalDevice)([]string){
-	missing := []string{}
-}
-*/
-
-type BaseInstanceExtensions struct {
-	wanted   []string
-	required []string
-	actual   []string
-}
-
-func NewBaseInstanceExtensions(wanted []string, required []string) *BaseInstanceExtensions {
-	var base BaseInstanceExtensions
-	base.wanted = wanted
-	base.required = required
-	base.actual, _ = InstanceExtensions()
-	return &base
-}
-
-func (e *BaseInstanceExtensions) HasRequired() (bool, []string) {
+//Just make extensions checker a global thing because this is confusing for the config
+//If extension is not available it is returned in the missing return string
+func ValidateExtensions(vlk json.Vlk) []string {
 	missing := []string{}
 
-	for _, req := range e.required {
-		has := false
-		for _, act := range e.actual {
-			if req == act {
-				has = true
-				break
+	instance_extensions, err := InstanceExtensions()
+
+	if err != nil {
+		return []string{"Error Loading Instance or Device Extensions"}
+	}
+
+	user_extensions := append(vlk.Config.CoreExtensions, vlk.Config.UserExtensions...)
+
+	for _, ext := range user_extensions {
+		found := false
+		for _, gext := range instance_extensions {
+			if ext == gext {
+				found = true
 			}
 		}
-		if !has {
-			missing = append(missing, req)
+		if !found {
+			missing = append(missing, ext)
 		}
 	}
 
-	if len(missing) > 0 {
-		return false, missing
-	}
+	return missing
 
-	return true, missing
 }
 
-func (e *BaseInstanceExtensions) HasWanted() (bool, []string) {
+func ValidateDeviceExtensions(vlk json.Vlk, gpu vk.PhysicalDevice) []string {
 	missing := []string{}
 
-	for _, req := range e.wanted {
-		has := false
-		for _, act := range e.actual {
-			if req == act {
-				has = true
-				break
+	device_extensions, err_dev := DeviceExtensions(gpu)
+
+	if err_dev != nil {
+		return []string{"Error Loading Device Extensions"}
+	}
+
+	user_extensions := append(vlk.Config.CoreExtensions, vlk.Config.UserExtensions...)
+
+	for _, ext := range user_extensions {
+		found := false
+		for _, gext := range device_extensions {
+			if ext == gext {
+				found = true
 			}
 		}
-		if !has {
-			missing = append(missing, req)
+		if !found {
+			missing = append(missing, ext)
 		}
 	}
 
-	if len(missing) > 0 {
-		return false, missing
-	}
-
-	return true, missing
+	return missing
 }
 
-func (e *BaseInstanceExtensions) GetExtensions() []string {
-	implement := []string{}
-
-	for _, req := range e.required {
-		implement = append(implement, req)
-	}
-
-	for _, want := range e.wanted {
-		hasWanted := false
-		for _, req := range e.required {
-			if want == req {
-				hasWanted = true
-			}
-		}
-		if !hasWanted {
-			implement = append(implement, want)
-		}
-	}
-
-	return implement
-
-}
-
-//----------------Device Extensions--------------------//
-
-type BaseDeviceExtensions struct {
-	wanted   []string
-	required []string
-	actual   []string
-}
-
-func NewBaseDeviceExtensions(wanted []string, required []string, gpu vk.PhysicalDevice) *BaseDeviceExtensions {
-	var base BaseDeviceExtensions
-	base.wanted = wanted
-	base.required = required
-	base.actual, _ = DeviceExtensions(gpu)
-	return &base
-}
-
-func (e *BaseDeviceExtensions) HasRequired() (bool, []string) {
+func ValidateLayers(vlk json.Vlk) []string {
 	missing := []string{}
 
-	for _, req := range e.required {
-		has := false
-		for _, act := range e.actual {
-			if req == act {
-				has = true
-				break
+	platform_layers, err := ValidationLayers()
+
+	if err != nil {
+		return []string{"Error getting platform layers"}
+	}
+
+	for _, ext := range vlk.Config.VulkanLayers {
+		found := false
+		for _, gext := range platform_layers {
+			if ext == gext {
+				found = true
 			}
 		}
-		if !has {
-			missing = append(missing, req)
+		if !found {
+			missing = append(missing, ext)
 		}
 	}
 
-	if len(missing) > 0 {
-		return false, missing
-	}
-
-	return true, missing
-}
-
-func (e *BaseDeviceExtensions) HasWanted() (bool, []string) {
-	missing := []string{}
-
-	for _, req := range e.wanted {
-		has := false
-		for _, act := range e.actual {
-			if req == act {
-				has = true
-				break
-			}
-		}
-		if !has {
-			missing = append(missing, req)
-		}
-	}
-
-	if len(missing) > 0 {
-		return false, missing
-	}
-
-	return true, missing
-}
-
-func (e *BaseDeviceExtensions) GetExtensions() []string {
-	implement := []string{}
-
-	for _, req := range e.required {
-		implement = append(implement, req)
-	}
-
-	for _, want := range e.wanted {
-		hasWanted := false
-		for _, req := range e.required {
-			if want == req {
-				hasWanted = true
-			}
-		}
-		if !hasWanted {
-			implement = append(implement, want)
-		}
-	}
-
-	return implement
-
-}
-
-//----------------Layer Extensions--------------------//
-
-type BaseLayerExtensions struct {
-	wanted []string
-	actual []string
-}
-
-func NewBaseLayerExtensions(wanted []string) *BaseLayerExtensions {
-	var base BaseLayerExtensions
-	base.wanted = wanted
-	base.actual, _ = ValidationLayers()
-	return &base
-}
-
-//No required layer extensions
-func (e *BaseLayerExtensions) HasRequired() (bool, []string) {
-	missing := []string{}
-	return true, missing
-}
-
-func (e *BaseLayerExtensions) HasWanted() (bool, []string) {
-	missing := []string{}
-
-	for _, req := range e.wanted {
-		has := false
-		for _, act := range e.actual {
-			if req == act {
-				has = true
-				break
-			}
-		}
-		if !has {
-			missing = append(missing, req)
-		}
-	}
-
-	if len(missing) > 0 {
-		return false, missing
-	}
-
-	return true, missing
-}
-
-func (e *BaseLayerExtensions) GetExtensions() []string {
-	implement := []string{}
-
-	for _, want := range e.wanted {
-		implement = append(implement, want)
-
-	}
-
-	return implement
-
+	return missing
 }
