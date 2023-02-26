@@ -4,6 +4,8 @@
 
 -`dieselvk.Core`
 
+> **Attention** currently conducting JSON configuration refactor in *alpha* branch. 
+
 - Diesel Vulkan initializes entire Vulkan Instance from a Vlk Json Schema. See the [schema](json/vlk_schema.json) document and the [example](json/vlk_example.json) for examples on how to set up a configured instance. A global `Vlk` variable holds the configuration values.
 
 - Global `Dictionary` variable also is used to convert the Json configuration file stored strings which represent Vulkan Enumerations into ints. To use this value for example we can call
@@ -54,3 +56,24 @@ my_int := Dictionary.Get(Vlk.Piplelines.Topology)
 communication.
 
 -`dieselvk.CoreDisplay` - Manages screen device pixel format and other rendering format issues.
+
+
+> **Attention**, I am looking for community volunteers and team-mates who can take this project to the next level and also help with identifying and resolving any bugs and issues. If you would like to join the team on this project please let me know and we will start including all the licenses etc.
+
+# Future
+
+> As I'm nearing the completion of the Alpha build here, which is the JSON component configuration refactor I wanted to look ahead and summarize the milestones we have in store. JSON configuration does constistute a major refactor as it affects all modules
+
+**Bravo**
+ - Dynamic Buffers / Sampler Support
+
+**Charlie**
+ - Multiple Renderpass / Compute Shader integration Testing 
+
+**Delta**
+ - Multi-Threaded Instance Support / API Documentation / Device Testing / CI Builds / API Tutorial / Mult-GPU Support Testing
+
+**Echo**
+ - Native GUI Integration Support / Raycasting Support / Electron Based Utility Workflow Applications / Casting components into submodules / Shader reflection
+
+ If these milestones are met I will likely close the repository to be fork only. 
